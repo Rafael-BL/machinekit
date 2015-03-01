@@ -1500,8 +1500,8 @@ static struct option long_options[] = {
 int main(int argc, char **argv)
 {
     void *lib = dlopen("/home/machinekit/lib/machinekit_tp.so", RTLD_LAZY);
-    tracepoint(machinekit_provider, function_tracepoint, "rtapi_app.cc main");
-
+    tracepoint(machinekit_provider, function_timestamp, "main", "/rtapi/rtapi_app.cc");
+    
     int c;
     progname = argv[0];
     inifile =  getenv("MACHINEKIT_INI");

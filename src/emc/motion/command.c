@@ -388,7 +388,7 @@ void emcmotCommandHandler(void *arg, long period)
     emcmot_comp_entry_t *comp_entry;
     char issue_atspeed = 0;
     
-tracepoint(machinekit_provider, function_tracepoint, "before command_handler");
+tracepoint(machinekit_provider, function_timestamp, "before_command_handle", "/emc/motion/command.c");
 
     /* check for split read */
     if (emcmotCommand->head != emcmotCommand->tail) {
@@ -1752,7 +1752,7 @@ tracepoint(machinekit_provider, function_tracepoint, "before command_handler");
     }
     /* end of: if-new-command */
 
-tracepoint(machinekit_provider, function_tracepoint, "after command_handler");
+tracepoint(machinekit_provider, function_timestamp, "after_command_handle", "/emc/motion/command.c");
 
     return;
 }
