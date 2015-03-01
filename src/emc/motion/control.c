@@ -315,33 +315,33 @@ void emcmotController(void *arg, long period)
     emcmotStatus->head++;
     /* here begins the core of the controller */
 
-tracepoint(machinekit_provider, cycle_counter, "before_cycle_counter(control.c)", cycle_counter);
+tracepoint(machinekit_provider, cycle_counter, "before_cycle_counter", "/emc/motion/control.c", cycle_counter);
 
-tracepoint(machinekit_provider, function_timestamp, "before_process_inputs(control.c)");
+tracepoint(machinekit_provider, function_timestamp, "before_process_inputs", "/emc/motion/control.c");
     process_inputs();
-tracepoint(machinekit_provider, function_timestamp, "after_process_inputs(control.c)");
+tracepoint(machinekit_provider, function_timestamp, "after_process_inputs", "/emc/motion/control.c");
     do_forward_kins();
-tracepoint(machinekit_provider, function_timestamp, "after_do_forward_kins(control.c)");
+tracepoint(machinekit_provider, function_timestamp, "after_do_forward_kins", "/emc/motion/control.c");
     process_probe_inputs();
-tracepoint(machinekit_provider, function_timestamp, "after_process_probe_inputs(control.c)");
+tracepoint(machinekit_provider, function_timestamp, "after_process_probe_inputs", "/emc/motion/control.c");
     check_for_faults();
-tracepoint(machinekit_provider, function_timestamp, "after_check_for_faults(control.c)");
+tracepoint(machinekit_provider, function_timestamp, "after_check_for_faults", "/emc/motion/control.c");
     set_operating_mode();
-tracepoint(machinekit_provider, function_timestamp, "after_set_operating_mode(control.c)");
+tracepoint(machinekit_provider, function_timestamp, "after_set_operating_mode", "/emc/motion/control.c");
     handle_jogwheels();
-tracepoint(machinekit_provider, function_timestamp, "after_handle_jogwheels(control.c)");
+tracepoint(machinekit_provider, function_timestamp, "after_handle_jogwheels", "/emc/motion/control.c");
     do_homing_sequence();
-tracepoint(machinekit_provider, function_timestamp, "after_do_homing_sequence(control.c)");
+tracepoint(machinekit_provider, function_timestamp, "after_do_homing_sequence", "/emc/motion/control.c");
     do_homing();
-tracepoint(machinekit_provider, function_timestamp, "after_do_homing(control.c)");
+tracepoint(machinekit_provider, function_timestamp, "after_do_homing", "/emc/motion/control.c");
     get_pos_cmds(period);
-tracepoint(machinekit_provider, function_timestamp, "after_get_pos_cmds(control.c)");
+tracepoint(machinekit_provider, function_timestamp, "after_get_pos_cmds", "/emc/motion/control.c");
     compute_screw_comp();
-tracepoint(machinekit_provider, function_timestamp, "after_compute_screw_comp(control.c)");
+tracepoint(machinekit_provider, function_timestamp, "after_compute_screw_comp", "/emc/motion/control.c");
     output_to_hal();
-tracepoint(machinekit_provider, function_timestamp, "after_output_to_hal(control.c)");
+tracepoint(machinekit_provider, function_timestamp, "after_output_to_hal", "/emc/motion/control.c");
     update_status();
-tracepoint(machinekit_provider, function_timestamp, "after_update_status(control.c)");
+tracepoint(machinekit_provider, function_timestamp, "after_update_status", "/emc/motion/control.c");
     /* here ends the core of the controller */
     emcmotStatus->heartbeat++;
     /* set tail to head, to indicate work complete */
@@ -349,7 +349,7 @@ tracepoint(machinekit_provider, function_timestamp, "after_update_status(control
     /* clear init flag */
     first_pass = 0;
 
-tracepoint(machinekit_provider, cycle_counter, "after_cycle_counter(control.c)", cycle_counter);
+tracepoint(machinekit_provider, cycle_counter, "after_cycle_counter", "/emc/motion/control.c", cycle_counter);
 cycle_counter++;
 
 /* end of controller function */
