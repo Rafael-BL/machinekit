@@ -1,0 +1,1350 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN"
+    "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
+<head>
+<meta http-equiv="Content-Type" content="application/xhtml+xml; charset=UTF-8" />
+<meta name="generator" content="AsciiDoc 8.6.9" />
+<title><strong>Using LTTng with Machinekit</strong></title>
+<style type="text/css">
+/* Shared CSS for AsciiDoc xhtml11 and html5 backends */
+
+/* Default font. */
+body {
+  font-family: Georgia,serif;
+}
+
+/* Title font. */
+h1, h2, h3, h4, h5, h6,
+div.title, caption.title,
+thead, p.table.header,
+#toctitle,
+#author, #revnumber, #revdate, #revremark,
+#footer {
+  font-family: Arial,Helvetica,sans-serif;
+}
+
+body {
+  margin: 1em 5% 1em 5%;
+}
+
+a {
+  color: blue;
+  text-decoration: underline;
+}
+a:visited {
+  color: fuchsia;
+}
+
+em {
+  font-style: italic;
+  color: navy;
+}
+
+strong {
+  font-weight: bold;
+  color: #083194;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  color: #527bbd;
+  margin-top: 1.2em;
+  margin-bottom: 0.5em;
+  line-height: 1.3;
+}
+
+h1, h2, h3 {
+  border-bottom: 2px solid silver;
+}
+h2 {
+  padding-top: 0.5em;
+}
+h3 {
+  float: left;
+}
+h3 + * {
+  clear: left;
+}
+h5 {
+  font-size: 1.0em;
+}
+
+div.sectionbody {
+  margin-left: 0;
+}
+
+hr {
+  border: 1px solid silver;
+}
+
+p {
+  margin-top: 0.5em;
+  margin-bottom: 0.5em;
+}
+
+ul, ol, li > p {
+  margin-top: 0;
+}
+ul > li     { color: #aaa; }
+ul > li > * { color: black; }
+
+.monospaced, code, pre {
+  font-family: "Courier New", Courier, monospace;
+  font-size: inherit;
+  color: navy;
+  padding: 0;
+  margin: 0;
+}
+pre {
+  white-space: pre-wrap;
+}
+
+#author {
+  color: #527bbd;
+  font-weight: bold;
+  font-size: 1.1em;
+}
+#email {
+}
+#revnumber, #revdate, #revremark {
+}
+
+#footer {
+  font-size: small;
+  border-top: 2px solid silver;
+  padding-top: 0.5em;
+  margin-top: 4.0em;
+}
+#footer-text {
+  float: left;
+  padding-bottom: 0.5em;
+}
+#footer-badges {
+  float: right;
+  padding-bottom: 0.5em;
+}
+
+#preamble {
+  margin-top: 1.5em;
+  margin-bottom: 1.5em;
+}
+div.imageblock, div.exampleblock, div.verseblock,
+div.quoteblock, div.literalblock, div.listingblock, div.sidebarblock,
+div.admonitionblock {
+  margin-top: 1.0em;
+  margin-bottom: 1.5em;
+}
+div.admonitionblock {
+  margin-top: 2.0em;
+  margin-bottom: 2.0em;
+  margin-right: 10%;
+  color: #606060;
+}
+
+div.content { /* Block element content. */
+  padding: 0;
+}
+
+/* Block element titles. */
+div.title, caption.title {
+  color: #527bbd;
+  font-weight: bold;
+  text-align: left;
+  margin-top: 1.0em;
+  margin-bottom: 0.5em;
+}
+div.title + * {
+  margin-top: 0;
+}
+
+td div.title:first-child {
+  margin-top: 0.0em;
+}
+div.content div.title:first-child {
+  margin-top: 0.0em;
+}
+div.content + div.title {
+  margin-top: 0.0em;
+}
+
+div.sidebarblock > div.content {
+  background: #ffffee;
+  border: 1px solid #dddddd;
+  border-left: 4px solid #f0f0f0;
+  padding: 0.5em;
+}
+
+div.listingblock > div.content {
+  border: 1px solid #dddddd;
+  border-left: 5px solid #f0f0f0;
+  background: #f8f8f8;
+  padding: 0.5em;
+}
+
+div.quoteblock, div.verseblock {
+  padding-left: 1.0em;
+  margin-left: 1.0em;
+  margin-right: 10%;
+  border-left: 5px solid #f0f0f0;
+  color: #888;
+}
+
+div.quoteblock > div.attribution {
+  padding-top: 0.5em;
+  text-align: right;
+}
+
+div.verseblock > pre.content {
+  font-family: inherit;
+  font-size: inherit;
+}
+div.verseblock > div.attribution {
+  padding-top: 0.75em;
+  text-align: left;
+}
+/* DEPRECATED: Pre version 8.2.7 verse style literal block. */
+div.verseblock + div.attribution {
+  text-align: left;
+}
+
+div.admonitionblock .icon {
+  vertical-align: top;
+  font-size: 1.1em;
+  font-weight: bold;
+  text-decoration: underline;
+  color: #527bbd;
+  padding-right: 0.5em;
+}
+div.admonitionblock td.content {
+  padding-left: 0.5em;
+  border-left: 3px solid #dddddd;
+}
+
+div.exampleblock > div.content {
+  border-left: 3px solid #dddddd;
+  padding-left: 0.5em;
+}
+
+div.imageblock div.content { padding-left: 0; }
+span.image img { border-style: none; vertical-align: text-bottom; }
+a.image:visited { color: white; }
+
+dl {
+  margin-top: 0.8em;
+  margin-bottom: 0.8em;
+}
+dt {
+  margin-top: 0.5em;
+  margin-bottom: 0;
+  font-style: normal;
+  color: navy;
+}
+dd > *:first-child {
+  margin-top: 0.1em;
+}
+
+ul, ol {
+    list-style-position: outside;
+}
+ol.arabic {
+  list-style-type: decimal;
+}
+ol.loweralpha {
+  list-style-type: lower-alpha;
+}
+ol.upperalpha {
+  list-style-type: upper-alpha;
+}
+ol.lowerroman {
+  list-style-type: lower-roman;
+}
+ol.upperroman {
+  list-style-type: upper-roman;
+}
+
+div.compact ul, div.compact ol,
+div.compact p, div.compact p,
+div.compact div, div.compact div {
+  margin-top: 0.1em;
+  margin-bottom: 0.1em;
+}
+
+tfoot {
+  font-weight: bold;
+}
+td > div.verse {
+  white-space: pre;
+}
+
+div.hdlist {
+  margin-top: 0.8em;
+  margin-bottom: 0.8em;
+}
+div.hdlist tr {
+  padding-bottom: 15px;
+}
+dt.hdlist1.strong, td.hdlist1.strong {
+  font-weight: bold;
+}
+td.hdlist1 {
+  vertical-align: top;
+  font-style: normal;
+  padding-right: 0.8em;
+  color: navy;
+}
+td.hdlist2 {
+  vertical-align: top;
+}
+div.hdlist.compact tr {
+  margin: 0;
+  padding-bottom: 0;
+}
+
+.comment {
+  background: yellow;
+}
+
+.footnote, .footnoteref {
+  font-size: 0.8em;
+}
+
+span.footnote, span.footnoteref {
+  vertical-align: super;
+}
+
+#footnotes {
+  margin: 20px 0 20px 0;
+  padding: 7px 0 0 0;
+}
+
+#footnotes div.footnote {
+  margin: 0 0 5px 0;
+}
+
+#footnotes hr {
+  border: none;
+  border-top: 1px solid silver;
+  height: 1px;
+  text-align: left;
+  margin-left: 0;
+  width: 20%;
+  min-width: 100px;
+}
+
+div.colist td {
+  padding-right: 0.5em;
+  padding-bottom: 0.3em;
+  vertical-align: top;
+}
+div.colist td img {
+  margin-top: 0.3em;
+}
+
+@media print {
+  #footer-badges { display: none; }
+}
+
+#toc {
+  margin-bottom: 2.5em;
+}
+
+#toctitle {
+  color: #527bbd;
+  font-size: 1.1em;
+  font-weight: bold;
+  margin-top: 1.0em;
+  margin-bottom: 0.1em;
+}
+
+div.toclevel0, div.toclevel1, div.toclevel2, div.toclevel3, div.toclevel4 {
+  margin-top: 0;
+  margin-bottom: 0;
+}
+div.toclevel2 {
+  margin-left: 2em;
+  font-size: 0.9em;
+}
+div.toclevel3 {
+  margin-left: 4em;
+  font-size: 0.9em;
+}
+div.toclevel4 {
+  margin-left: 6em;
+  font-size: 0.9em;
+}
+
+span.aqua { color: aqua; }
+span.black { color: black; }
+span.blue { color: blue; }
+span.fuchsia { color: fuchsia; }
+span.gray { color: gray; }
+span.green { color: green; }
+span.lime { color: lime; }
+span.maroon { color: maroon; }
+span.navy { color: navy; }
+span.olive { color: olive; }
+span.purple { color: purple; }
+span.red { color: red; }
+span.silver { color: silver; }
+span.teal { color: teal; }
+span.white { color: white; }
+span.yellow { color: yellow; }
+
+span.aqua-background { background: aqua; }
+span.black-background { background: black; }
+span.blue-background { background: blue; }
+span.fuchsia-background { background: fuchsia; }
+span.gray-background { background: gray; }
+span.green-background { background: green; }
+span.lime-background { background: lime; }
+span.maroon-background { background: maroon; }
+span.navy-background { background: navy; }
+span.olive-background { background: olive; }
+span.purple-background { background: purple; }
+span.red-background { background: red; }
+span.silver-background { background: silver; }
+span.teal-background { background: teal; }
+span.white-background { background: white; }
+span.yellow-background { background: yellow; }
+
+span.big { font-size: 2em; }
+span.small { font-size: 0.6em; }
+
+span.underline { text-decoration: underline; }
+span.overline { text-decoration: overline; }
+span.line-through { text-decoration: line-through; }
+
+div.unbreakable { page-break-inside: avoid; }
+
+
+/*
+ * xhtml11 specific
+ *
+ * */
+
+div.tableblock {
+  margin-top: 1.0em;
+  margin-bottom: 1.5em;
+}
+div.tableblock > table {
+  border: 3px solid #527bbd;
+}
+thead, p.table.header {
+  font-weight: bold;
+  color: #527bbd;
+}
+p.table {
+  margin-top: 0;
+}
+/* Because the table frame attribute is overriden by CSS in most browsers. */
+div.tableblock > table[frame="void"] {
+  border-style: none;
+}
+div.tableblock > table[frame="hsides"] {
+  border-left-style: none;
+  border-right-style: none;
+}
+div.tableblock > table[frame="vsides"] {
+  border-top-style: none;
+  border-bottom-style: none;
+}
+
+
+/*
+ * html5 specific
+ *
+ * */
+
+table.tableblock {
+  margin-top: 1.0em;
+  margin-bottom: 1.5em;
+}
+thead, p.tableblock.header {
+  font-weight: bold;
+  color: #527bbd;
+}
+p.tableblock {
+  margin-top: 0;
+}
+table.tableblock {
+  border-width: 3px;
+  border-spacing: 0px;
+  border-style: solid;
+  border-color: #527bbd;
+  border-collapse: collapse;
+}
+th.tableblock, td.tableblock {
+  border-width: 1px;
+  padding: 4px;
+  border-style: solid;
+  border-color: #527bbd;
+}
+
+table.tableblock.frame-topbot {
+  border-left-style: hidden;
+  border-right-style: hidden;
+}
+table.tableblock.frame-sides {
+  border-top-style: hidden;
+  border-bottom-style: hidden;
+}
+table.tableblock.frame-none {
+  border-style: hidden;
+}
+
+th.tableblock.halign-left, td.tableblock.halign-left {
+  text-align: left;
+}
+th.tableblock.halign-center, td.tableblock.halign-center {
+  text-align: center;
+}
+th.tableblock.halign-right, td.tableblock.halign-right {
+  text-align: right;
+}
+
+th.tableblock.valign-top, td.tableblock.valign-top {
+  vertical-align: top;
+}
+th.tableblock.valign-middle, td.tableblock.valign-middle {
+  vertical-align: middle;
+}
+th.tableblock.valign-bottom, td.tableblock.valign-bottom {
+  vertical-align: bottom;
+}
+
+
+/*
+ * manpage specific
+ *
+ * */
+
+body.manpage h1 {
+  padding-top: 0.5em;
+  padding-bottom: 0.5em;
+  border-top: 2px solid silver;
+  border-bottom: 2px solid silver;
+}
+body.manpage h2 {
+  border-style: none;
+}
+body.manpage div.sectionbody {
+  margin-left: 3em;
+}
+
+@media print {
+  body.manpage div#toc { display: none; }
+}
+
+
+*
+{
+	margin: auto;
+	width: 950px;
+	color: black;
+	text-align: justify;
+	line-height: 2;
+}
+
+body
+{
+	font-size: 18px;
+	font-family: Helvetica, Times, Arial, sans-serif;
+}
+
+</style>
+<script type="text/javascript">
+/*<![CDATA[*/
+var asciidoc = {  // Namespace.
+
+/////////////////////////////////////////////////////////////////////
+// Table Of Contents generator
+/////////////////////////////////////////////////////////////////////
+
+/* Author: Mihai Bazon, September 2002
+ * http://students.infoiasi.ro/~mishoo
+ *
+ * Table Of Content generator
+ * Version: 0.4
+ *
+ * Feel free to use this script under the terms of the GNU General Public
+ * License, as long as you do not remove or alter this notice.
+ */
+
+ /* modified by Troy D. Hanson, September 2006. License: GPL */
+ /* modified by Stuart Rackham, 2006, 2009. License: GPL */
+
+// toclevels = 1..4.
+toc: function (toclevels) {
+
+  function getText(el) {
+    var text = "";
+    for (var i = el.firstChild; i != null; i = i.nextSibling) {
+      if (i.nodeType == 3 /* Node.TEXT_NODE */) // IE doesn't speak constants.
+        text += i.data;
+      else if (i.firstChild != null)
+        text += getText(i);
+    }
+    return text;
+  }
+
+  function TocEntry(el, text, toclevel) {
+    this.element = el;
+    this.text = text;
+    this.toclevel = toclevel;
+  }
+
+  function tocEntries(el, toclevels) {
+    var result = new Array;
+    var re = new RegExp('[hH]([1-'+(toclevels+1)+'])');
+    // Function that scans the DOM tree for header elements (the DOM2
+    // nodeIterator API would be a better technique but not supported by all
+    // browsers).
+    var iterate = function (el) {
+      for (var i = el.firstChild; i != null; i = i.nextSibling) {
+        if (i.nodeType == 1 /* Node.ELEMENT_NODE */) {
+          var mo = re.exec(i.tagName);
+          if (mo && (i.getAttribute("class") || i.getAttribute("className")) != "float") {
+            result[result.length] = new TocEntry(i, getText(i), mo[1]-1);
+          }
+          iterate(i);
+        }
+      }
+    }
+    iterate(el);
+    return result;
+  }
+
+  var toc = document.getElementById("toc");
+  if (!toc) {
+    return;
+  }
+
+  // Delete existing TOC entries in case we're reloading the TOC.
+  var tocEntriesToRemove = [];
+  var i;
+  for (i = 0; i < toc.childNodes.length; i++) {
+    var entry = toc.childNodes[i];
+    if (entry.nodeName.toLowerCase() == 'div'
+     && entry.getAttribute("class")
+     && entry.getAttribute("class").match(/^toclevel/))
+      tocEntriesToRemove.push(entry);
+  }
+  for (i = 0; i < tocEntriesToRemove.length; i++) {
+    toc.removeChild(tocEntriesToRemove[i]);
+  }
+
+  // Rebuild TOC entries.
+  var entries = tocEntries(document.getElementById("content"), toclevels);
+  for (var i = 0; i < entries.length; ++i) {
+    var entry = entries[i];
+    if (entry.element.id == "")
+      entry.element.id = "_toc_" + i;
+    var a = document.createElement("a");
+    a.href = "#" + entry.element.id;
+    a.appendChild(document.createTextNode(entry.text));
+    var div = document.createElement("div");
+    div.appendChild(a);
+    div.className = "toclevel" + entry.toclevel;
+    toc.appendChild(div);
+  }
+  if (entries.length == 0)
+    toc.parentNode.removeChild(toc);
+},
+
+
+/////////////////////////////////////////////////////////////////////
+// Footnotes generator
+/////////////////////////////////////////////////////////////////////
+
+/* Based on footnote generation code from:
+ * http://www.brandspankingnew.net/archive/2005/07/format_footnote.html
+ */
+
+footnotes: function () {
+  // Delete existing footnote entries in case we're reloading the footnodes.
+  var i;
+  var noteholder = document.getElementById("footnotes");
+  if (!noteholder) {
+    return;
+  }
+  var entriesToRemove = [];
+  for (i = 0; i < noteholder.childNodes.length; i++) {
+    var entry = noteholder.childNodes[i];
+    if (entry.nodeName.toLowerCase() == 'div' && entry.getAttribute("class") == "footnote")
+      entriesToRemove.push(entry);
+  }
+  for (i = 0; i < entriesToRemove.length; i++) {
+    noteholder.removeChild(entriesToRemove[i]);
+  }
+
+  // Rebuild footnote entries.
+  var cont = document.getElementById("content");
+  var spans = cont.getElementsByTagName("span");
+  var refs = {};
+  var n = 0;
+  for (i=0; i<spans.length; i++) {
+    if (spans[i].className == "footnote") {
+      n++;
+      var note = spans[i].getAttribute("data-note");
+      if (!note) {
+        // Use [\s\S] in place of . so multi-line matches work.
+        // Because JavaScript has no s (dotall) regex flag.
+        note = spans[i].innerHTML.match(/\s*\[([\s\S]*)]\s*/)[1];
+        spans[i].innerHTML =
+          "[<a id='_footnoteref_" + n + "' href='#_footnote_" + n +
+          "' title='View footnote' class='footnote'>" + n + "</a>]";
+        spans[i].setAttribute("data-note", note);
+      }
+      noteholder.innerHTML +=
+        "<div class='footnote' id='_footnote_" + n + "'>" +
+        "<a href='#_footnoteref_" + n + "' title='Return to text'>" +
+        n + "</a>. " + note + "</div>";
+      var id =spans[i].getAttribute("id");
+      if (id != null) refs["#"+id] = n;
+    }
+  }
+  if (n == 0)
+    noteholder.parentNode.removeChild(noteholder);
+  else {
+    // Process footnoterefs.
+    for (i=0; i<spans.length; i++) {
+      if (spans[i].className == "footnoteref") {
+        var href = spans[i].getElementsByTagName("a")[0].getAttribute("href");
+        href = href.match(/#.*/)[0];  // Because IE return full URL.
+        n = refs[href];
+        spans[i].innerHTML =
+          "[<a href='#_footnote_" + n +
+          "' title='View footnote' class='footnote'>" + n + "</a>]";
+      }
+    }
+  }
+},
+
+install: function(toclevels) {
+  var timerId;
+
+  function reinstall() {
+    asciidoc.footnotes();
+    if (toclevels) {
+      asciidoc.toc(toclevels);
+    }
+  }
+
+  function reinstallAndRemoveTimer() {
+    clearInterval(timerId);
+    reinstall();
+  }
+
+  timerId = setInterval(reinstall, 500);
+  if (document.addEventListener)
+    document.addEventListener("DOMContentLoaded", reinstallAndRemoveTimer, false);
+  else
+    window.onload = reinstallAndRemoveTimer;
+}
+
+}
+asciidoc.install();
+/*]]>*/
+</script>
+</head>
+<body class="article">
+<div id="header">
+<h1><strong>Using LTTng with Machinekit</strong></h1>
+</div>
+<div id="content">
+<div class="sect1">
+<h2 id="_strong_introduction_strong"><strong>Introduction</strong></h2>
+<div class="sectionbody">
+<div class="paragraph"><p>LTTng is an open source system software package used for tracing the Linux kernel, user applications and libraries. Its usage is relatively simple and the present documentation will show exactly how it can be done in the context of Machinekit. Please note that this is a simple and quick startup guide. For further reference, consult the official LTTng documentation at the following link:</p></div>
+<div class="paragraph"><p><a href="http://lttng.org/docs/">http://lttng.org/docs/</a></p></div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_strong_installing_lttng_strong"><strong>Installing LTTng</strong></h2>
+<div class="sectionbody">
+<div class="paragraph"><p>Installing LTTng can either be done with packages or built from source. We wont&#8217;t go into the installation details here because they vary depending on the distributions. Every information on the topic, including desktop distributions, embedded distributions and how to build from source can be found here:</p></div>
+<div class="paragraph"><p><a href="http://lttng.org/docs/#doc-installing-lttng">http://lttng.org/docs/#doc-installing-lttng</a></p></div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_strong_tracing_the_linux_kernel_strong"><strong>Tracing the Linux Kernel</strong></h2>
+<div class="sectionbody">
+<div class="paragraph"><p>In order to trace the linux kernel, one needs to create a tracing session, enable various events, start the tracing and complete the task that has to be traced. Once the task is completed, the tracing has to be stopped and the tracing session destroyed (destroying the session won&#8217;t destroy the actual trace). It has to be noted that tracing the linux kernel has to be done by a sudo user.</p></div>
+<div class="paragraph"><p>All of those things are done using the lttng tool, which has a Git-like command line structure. The list of available kernel events can be listed by using the following command:</p></div>
+<div class="listingblock">
+<div class="content">
+<pre><code>lttng list --kernel</code></pre>
+</div></div>
+<div class="paragraph"><p>Enabling a kernel event (in order to get it traced) is done by using the the enable-event command. Here is an example in which we enable the events sched_switch and sched_process_fork:</p></div>
+<div class="listingblock">
+<div class="content">
+<pre><code>lttng enable-event --kernel  sched_switch,sched_process_fork</code></pre>
+</div></div>
+<div class="paragraph"><p>One can also enable all kernel events at once:</p></div>
+<div class="listingblock">
+<div class="content">
+<pre><code>lttng enable-event --kernel --all</code></pre>
+</div></div>
+<div class="paragraph"><p>The following code is an example that would result in a trace with all kernel events enabled.</p></div>
+<div class="listingblock">
+<div class="content">
+<pre><code>sudo lttng create kernelTrace
+sudo lttng enable-event --kernel --all
+sudo lttng start
+//Complete the task that has to be traced
+sudo lttng stop
+sudo lttng destroy</code></pre>
+</div></div>
+<div class="paragraph"><p>There is also an example of a script to trace the kernel called do-kernel-trace.sh under /scripts/lttng-scripts.
+Further references on tracing the linux kernel can be found at the following links:</p></div>
+<div class="paragraph"><p><a href="http://lttng.org/docs/#doc-tracing-the-linux-kernel">http://lttng.org/docs/#doc-tracing-the-linux-kernel</a></p></div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_strong_tracing_a_user_space_application_strong"><strong>Tracing a user space application</strong></h2>
+<div class="sectionbody">
+<div class="paragraph"><p>In order to trace a user space application, one needs to understand the concept of a tracepoint and of a tracepoint provider. A tracepoint provider is some sort of namespace for tracepoint definitions. A tracepoint could be considered like a printf: it records and outputs various information from any given line (where a tracepoint has been inserted) in some source code.</p></div>
+<div class="paragraph"><p>A tracepoint provider has both a header file and a C file. In the header, we find a few defines needed for the provider. Following those defines, we find the actual tracepoint definitions. Tracepoints are always defined inside the TRACEPOINT_EVENT() macro. For each tracepoint, one must provide a provider name, a tracepoint name, a list of arguments and a list of fields (which are the actual fields of the recorded events). A tracepoint provider header could look like this:</p></div>
+<div class="listingblock">
+<div class="content">
+<pre><code>#undef TRACEPOINT_PROVIDER
+#define TRACEPOINT_PROVIDER hello_world
+
+#undef TRACEPOINT_INCLUDE
+#define TRACEPOINT_INCLUDE "./hello-tp.h"
+
+#if !defined(_HELLO_TP_H) || defined(TRACEPOINT_HEADER_MULTI_READ)
+#define _HELLO_TP_H
+
+#include &lt;lttng/tracepoint.h&gt;
+
+TRACEPOINT_EVENT(
+    hello_world,
+    my_first_tracepoint,
+    TP_ARGS(
+        int, my_integer_arg,
+        char*, my_string_arg
+    ),
+    TP_FIELDS(
+        ctf_string(my_string_field, my_string_arg)
+        ctf_integer(int, my_integer_field, my_integer_arg)
+    )
+)
+
+#endif /* _HELLO_TP_H */
+#include &lt;lttng/tracepoint-event.h&gt;</code></pre>
+</div></div>
+<div class="paragraph"><p>A list of all the supported TP_FIELDS can be found here:</p></div>
+<div class="paragraph"><p><a href="http://lttng.org/docs/#doc-lttng-ust-ref">http://lttng.org/docs/#doc-lttng-ust-ref</a></p></div>
+<div class="paragraph"><p>The C file matching this tracepoint provider header would be the following:</p></div>
+<div class="listingblock">
+<div class="content">
+<pre><code>#define TRACEPOINT_CREATE_PROBES
+#define TRACEPOINT_DEFINE
+#include "hello-tp.h"</code></pre>
+</div></div>
+<div class="paragraph"><p>Finally, the actual tracepoint provider has to be created and linked to the application. There are two common ways of doing that, which are to either statically link the tracepoint provider into the user space application or to compile it as a shared library and to dynamically load it. Further references on building and linking a tracepoint provider can be found here:</p></div>
+<div class="paragraph"><p><a href="http://lttng.org/docs/#doc-building-tracepoint-providers-and-user-application">http://lttng.org/docs/#doc-building-tracepoint-providers-and-user-application</a></p></div>
+<div class="paragraph"><p>However, for the rest of this documentation, we will look more closely at dynamically loading a tracepoint provider that has been compiled as a shared library. Therefore, in order to compile the tracepoint provider, execute the following command:</p></div>
+<div class="listingblock">
+<div class="content">
+<pre><code>gcc -c -fpic -I. hello-tp.c</code></pre>
+</div></div>
+<div class="paragraph"><p>Then, build it as a shared library like so:</p></div>
+<div class="listingblock">
+<div class="content">
+<pre><code>gcc -shared -Wl,--no-as-needed -o hello-tp.so -llttng-ust hello-tp.o</code></pre>
+</div></div>
+<div class="paragraph"><p>Now, by dlopening that shared library in the user space application, we can have access to the tracepoint provider and start probing the actual source code.</p></div>
+<div class="listingblock">
+<div class="content">
+<pre><code>//First line of the main in the application
+dlopen("/path-to-shared-library/hello-tp.so", RTLD_LAZY);</code></pre>
+</div></div>
+<div class="paragraph"><p>Now, by including hello-tp.h in a user application (has to be inserted in every source code file where we wish to use the tracepoint() call), we can insert any number of tracepoints using the tracepoint() call. Including hello-tp.h is done like so:</p></div>
+<div class="listingblock">
+<div class="content">
+<pre><code>#define TRACEPOINT_DEFINE
+#define TRACEPOINT_PROBE_DYNAMIC_LINKAGE
+#include "/path-to-shared-library/hello-tp.h"
+...
+tracepoint(hello_world, my_first_tracepoint, 23, "hi there!");
+...</code></pre>
+</div></div>
+<div class="paragraph"><p>Finally, in order to trace the actual application, a tracing session has to be created and activated (exactly like when tracing the linux kernel):</p></div>
+<div class="listingblock">
+<div class="content">
+<pre><code>lttng create user spaceTrace
+lttng enable-event --user space hello_world:my_first_tracepoint
+lttng start
+//Execute the code
+lttng stop</code></pre>
+</div></div>
+<div class="paragraph"><p>It has to be noted that listing the user space events is also possible:</p></div>
+<div class="listingblock">
+<div class="content">
+<pre><code>lttng list --userspace</code></pre>
+</div></div>
+<div class="paragraph"><p>Enabling all user space events at once is also possible :</p></div>
+<div class="listingblock">
+<div class="content">
+<pre><code>sudo lttng enable-event -u -a</code></pre>
+</div></div>
+<div class="paragraph"><p>There is also, like with the kernel trace, an example of a script that traces the user space of machinekit called do-ust-trace.sh under /scripts/lttng-scripts. Further references on tracing a linux user space application can be found at the following links:</p></div>
+<div class="paragraph"><p><a href="http://lttng.org/docs/#doc-c-application">http://lttng.org/docs/#doc-c-application</a></p></div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_strong_viewing_and_analysing_a_trace_strong"><strong>Viewing and analysing a trace</strong></h2>
+<div class="sectionbody">
+<div class="paragraph"><p>There are two common ways of viewing and analysing a trace. The first one is by using a command line utility called Babeltrace. The second one, which is the one we are using here, is Trace Compass (available as both an eclipse plugin and a standalone application). Trace Compass has been chosen due to its user-friendliness and clear GUI.</p></div>
+<div class="paragraph"><p>Instructions regarding the installation of Trace Compass can be found here:</p></div>
+<div class="paragraph"><p><a href="http://tracecompass.org/#getting">http://tracecompass.org/#getting</a></p></div>
+<div class="paragraph"><p>Once Trace Compass is installed, viewing and analysing a trace becomes fairly simple. More details as to how this is done are found in the following examples. For additional references on how to use Trace Compass make sure to read their user-guide.</p></div>
+<div class="paragraph"><p><a href="http://archive.eclipse.org/tracecompass/doc/org.eclipse.tracecompass.doc.user/User-Guide.html">http://archive.eclipse.org/tracecompass/doc/org.eclipse.tracecompass.doc.user/User-Guide.html</a></p></div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_strong_a_kernel_example_strong"><strong>A kernel example</strong></h2>
+<div class="sectionbody">
+<div class="paragraph"><p>Let&#8217;s start with a simple kernel trace that will record how the kernel behaves when launching Machinekit with the Axis GUI. Therefore, we are going to create a tracing session, enable the desired events, accomplish the task (start Machinekit with the Axis GUI), destroy the tracing session and finally look at the trace in Trace Compass. To do so, execute the following commands:</p></div>
+<div class="listingblock">
+<div class="content">
+<pre><code>#Create the tracing session (trace will be outputed in "./machinekit-kernel")
+sudo lttng create kernel -o machinekit-kernel
+
+#Enable kernel events
+sudo lttng enable-event -k sched_switch
+sudo lttng enable-event -k sched_wakeup
+sudo lttng enable-event -k sched_process_fork
+sudo lttng enable-event -k sched_process_exec
+sudo lttng enable-event -k sched_process_wait
+sudo lttng enable-event -k sched_process_exit
+sudo lttng enable-event -k --syscall --all
+
+#Start the tracing
+sudo lttng start
+
+#Start machinekit ans open the axis GUI
+linuxcnc
+
+#Stop the tracing
+sudo lttng stop
+
+#Clean the tracing session
+sudo lttng destroy -a
+
+#Give proper permission to be able to read the trace in Trace Compass
+sudo chmod -R 755 machinekit-kernel</code></pre>
+</div></div>
+<div class="paragraph"><p>Now that the trace has been recorded, we can import it into Trace Compass to have a closer look at it. Once Trace Compass is running, create a new workspace, a new tracing project and finally import the trace. If you are unsure as to how to do so, Trace Compass has very detailed documentation on the topic. It is found at the following link:</p></div>
+<div class="paragraph"><p><a href="http://archive.eclipse.org/tracecompass/doc/org.eclipse.tracecompass.doc.user/Trace-Compass-Main-Features.html#Creating_a_Tracing_Project">http://archive.eclipse.org/tracecompass/doc/org.eclipse.tracecompass.doc.user/Trace-Compass-Main-Features.html#Creating_a_Tracing_Project</a></p></div>
+<div class="paragraph"><p>Once the trace is imported, open it, and you should now have access to a few different views to analyse your trace. These views include  a control flow that allows you to see the progression of the processes in time, a statistics view, a CPU usage view and a ressources view.</p></div>
+<div class="paragraph"><p><span class="image">
+<a class="image" href="./Screenshots/Kernel.png">
+<img src="./Screenshots/Kernel.png" alt="./Screenshots/Kernel.png" height="500" />
+</a>
+</span></p></div>
+<div class="paragraph"><p>More details about viewing and analysing kernel traces:</p></div>
+<div class="paragraph"><p><a href="http://archive.eclipse.org/tracecompass/doc/org.eclipse.tracecompass.doc.user/LTTng-Kernel-Analysis.html#LTTng_Kernel_Analysis">http://archive.eclipse.org/tracecompass/doc/org.eclipse.tracecompass.doc.user/LTTng-Kernel-Analysis.html#LTTng_Kernel_Analysis</a></p></div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_strong_a_user_space_example_strong"><strong>A user space example</strong></h2>
+<div class="sectionbody">
+<div class="paragraph"><p>In this section, we are going to trace /src/emc/motion/control.c to see precisely how many cycles the function</p></div>
+<div class="listingblock">
+<div class="content">
+<pre><code>void emcmotController(void *arg, long period)</code></pre>
+</div></div>
+<div class="paragraph"><p>realises when executing the following gcode file.</p></div>
+<div class="listingblock">
+<div class="content">
+<pre><code>G21        ;metric values
+G90        ;absolute positioning
+G64 P0.25   ; path mode
+G92  A881.340440
+F4800
+G1 X44.988 Y16.364000 A881.340440
+M2</code></pre>
+</div></div>
+<div class="paragraph"><p>We are also going to look into how much time each of those functions take to complete in each cycle.</p></div>
+<div class="listingblock">
+<div class="content">
+<pre><code>process_inputs();
+do_forward_kins();
+process_probe_inputs();
+check_for_faults();
+set_operating_mode();
+handle_jogwheels();
+do_homing_sequence();
+do_homing();
+get_pos_cmds(period);
+compute_screw_comp();
+output_to_hal();
+update_status();</code></pre>
+</div></div>
+<div class="paragraph"><p>The first thing we need to do here is to create, compile and link a tracepoint provider. To do so, we are going to use the following tracepoint provider:</p></div>
+<div class="listingblock">
+<div class="content">
+<pre><code>//machinekit-tp.c
+#define TRACEPOINT_CREATE_PROBES
+#include "machinekit_tp.h"
+
+//machinekit-tp.h
+#undef TRACEPOINT_PROVIDER
+#define TRACEPOINT_PROVIDER machinekit_provider
+
+#if !defined(_MACHINEKIT_TP_H) || defined(TRACEPOINT_HEADER_MULTI_READ)
+#define _MACHINEKIT_TP_H
+
+#include &lt;lttng/tracepoint.h&gt;
+
+TRACEPOINT_EVENT(
+    machinekit_provider,
+    function_timestamp,
+    TP_ARGS(
+        char*, my_function_name,
+        char*, my_function_file
+    ),
+    TP_FIELDS(
+        ctf_string(function_name, my_function_name)
+        ctf_string(function_file, my_function_file)
+    )
+)
+
+TRACEPOINT_EVENT(
+    machinekit_provider,
+    cycle_counter,
+    TP_ARGS(
+        char*, my_function_name,
+        char*, my_function_file,
+        int, my_cycle_count
+    ),
+    TP_FIELDS(
+        ctf_string(function_name, my_function_name)
+        ctf_string(function_file, my_function_file)
+        ctf_integer(int, cycle_count, my_cycle_count)
+    )
+)
+
+#endif /* _MACHINEKIT_TP_H */
+#undef TRACEPOINT_INCLUDE
+
+#define TRACEPOINT_INCLUDE "./machinekit_tp.h"
+#include &lt;lttng/tracepoint-event.h&gt;</code></pre>
+</div></div>
+<div class="paragraph"><p>Then, we simply compile it using the following commands:</p></div>
+<div class="listingblock">
+<div class="content">
+<pre><code>gcc -c -fpic -I. machinekit_tp.c
+gcc -shared -Wl,--no-as-needed -o machinekit_tp.so -llttng-ust machinekit_tp.o</code></pre>
+</div></div>
+<div class="paragraph"><p>Now, by "dlopening" that shared library in the user space application, we can have access to the tracepoint provider and start probing the actual source code.</p></div>
+<div class="listingblock">
+<div class="content">
+<pre><code>//First line of the main in the application which is under /src/rtapi/rtapi_app.cc
+int main(int argc, char **argv)
+{
+dlopen("/path-to-shared-library/machinekit_tp.so", RTLD_LAZY);
+...
+}</code></pre>
+</div></div>
+<div class="paragraph"><p>Once that is done, we go into the actual source code we want to trace (/src/emc/motion/control.c). We then insert the header needed to find the tracepoint provider as well as a global variable to count the number of cycles.</p></div>
+<div class="listingblock">
+<div class="content">
+<pre><code>#define TRACEPOINT_DEFINE
+#define TRACEPOINT_PROBE_DYNAMIC_LINKAGE
+#include "/path-to-shared-library/machinekit_tp.h"
+int cycle_counter = 1;</code></pre>
+</div></div>
+<div class="paragraph"><p>Finally, we insert the actual tracepoints into the source code and we increment the cycle counter at the end of each loop.</p></div>
+<div class="listingblock">
+<div class="content">
+<pre><code>tracepoint(machinekit_provider, cycle_counter, "before_cycle_counter", "/emc/motion/control.c", cycle_counter);
+tracepoint(machinekit_provider, function_timestamp, "before_process_inputs", "/emc/motion/control.c");
+process_inputs();
+tracepoint(machinekit_provider, function_timestamp, "after_process_inputs", "/emc/motion/control.c");
+do_forward_kins();
+tracepoint(machinekit_provider, function_timestamp, "after_do_forward_kins", "/emc/motion/control.c");
+process_probe_inputs();
+tracepoint(machinekit_provider, function_timestamp, "after_process_probe_inputs", "/emc/motion/control.c");
+check_for_faults();
+tracepoint(machinekit_provider, function_timestamp, "after_check_for_faults", "/emc/motion/control.c");
+set_operating_mode();
+tracepoint(machinekit_provider, function_timestamp, "after_set_operating_mode", "/emc/motion/control.c");
+handle_jogwheels();
+tracepoint(machinekit_provider, function_timestamp, "after_handle_jogwheels", "/emc/motion/control.c");
+do_homing_sequence();
+tracepoint(machinekit_provider, function_timestamp, "after_do_homing_sequence", "/emc/motion/control.c");
+do_homing();
+tracepoint(machinekit_provider, function_timestamp, "after_do_homing", "/emc/motion/control.c");
+get_pos_cmds(period);
+tracepoint(machinekit_provider, function_timestamp, "after_get_pos_cmds", "/emc/motion/control.c");
+compute_screw_comp();
+tracepoint(machinekit_provider, function_timestamp, "after_compute_screw_comp", "/emc/motion/control.c");
+output_to_hal();
+tracepoint(machinekit_provider, function_timestamp, "after_output_to_hal", "/emc/motion/control.c");
+update_status();
+tracepoint(machinekit_provider, function_timestamp, "after_update_status", "/emc/motion/control.c");
+    /* here ends the core of the controller */
+    emcmotStatus-&gt;heartbeat++;
+    /* set tail to head, to indicate work complete */
+    emcmotStatus-&gt;tail = emcmotStatus-&gt;head;
+    /* clear init flag */
+    first_pass = 0;
+tracepoint(machinekit_provider, cycle_counter, "after_cycle_counter", "/emc/motion/control.c", cycle_counter);
+cycle_counter++;</code></pre>
+</div></div>
+<div class="paragraph"><p>Once all that is done, we are ready to recompile the changed files and then trace the application. By executing the following commands, we create a tracing session, we enable the user space events, we start the trace and we execute the task (gcode file).</p></div>
+<div class="listingblock">
+<div class="content">
+<pre><code>#Create the tracing session (trace will be outputed in "lttng-scripts/machinekit-ust")
+sudo lttng create ust -o machinekit-ust
+
+#Enable ust events
+sudo lttng enable-event -u -a
+
+#Start the tracing
+sudo lttng start
+
+#Start machinekit and execute the gcode file (task to be traced)
+linuxcnc
+
+#Stop the tracing
+sudo lttng stop
+
+#Clean the tracing session
+sudo lttng destroy -a
+
+#Give proper permission to be able to read the trace
+sudo chmod -R 755 machinekit-ust</code></pre>
+</div></div>
+<div class="paragraph"><p>Finally, after importing the trace into Trace Compass, we can view and analyse it. Again, we have different views. The main one shows every tracepoint that was recorded with its timestamp and recorded fields. However, viewing many tracepoints in that view and reading every timestamp can be really fastidious. Therefore, in the last section of this documention, we will go over a simple way of writing custom views to better analyse and view user space traces. It should also be noted that, even though tracepoints are light and take very minimal time to execute, having an enormous amount of tracepoints can drastically slow down the execution of an application. For example, the trace we just did has over 500 000 recorded tracepoints, as seen in the statistics
+view.</p></div>
+<div class="paragraph"><p><span class="image">
+<a class="image" href="./Screenshots/UST.png">
+<img src="./Screenshots/UST.png" alt="./Screenshots/UST.png" height="550" />
+</a>
+</span></p></div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_strong_a_combined_and_synchronised_kernel_and_user_space_example_strong"><strong>A combined and synchronised kernel and user space example</strong></h2>
+<div class="sectionbody">
+<div class="paragraph"><p>It is also possible to record kernel events and user space events simultaneously and to analyse the synchronised recorded traces. This allows you to view what is happening in the kernel when an event occurs in user space and vice-versa. To do so, run the following commands (which are basically a mix of the commands required to trace the kernel and the commands required to trace the user space). We will assume here that the tracepoint provider has already been defined, compiled and that the resulting shared library has been "dlopened" in the main as well as the source code already instrumented.</p></div>
+<div class="listingblock">
+<div class="content">
+<pre><code>#Create the tracing session (trace will be outputed in "lttng-scripts/machinekit-ust-kernel")
+sudo lttng create ust-kernel -o machinekit-ust-kernel
+
+#Enable kernel events
+sudo lttng enable-event -k sched_switch
+sudo lttng enable-event -k sched_wakeup
+sudo lttng enable-event -k sched_process_fork
+sudo lttng enable-event -k sched_process_exec
+sudo lttng enable-event -k sched_process_wait
+sudo lttng enable-event -k sched_process_exit
+sudo lttng enable-event -k --syscall --all
+
+#Enable ust events
+sudo lttng enable-event -u -a
+
+#Start the tracing
+sudo lttng start
+
+#Start machinekit and execute the user space task that needs to be traced (gcode file)
+linuxcnc
+
+#Stop the tracing
+sudo lttng stop
+
+#Clean the tracing session
+sudo lttng destroy -a
+
+#Give proper permission to be able to read the trace
+sudo chmod -R 755 machinekit-ust-kernel</code></pre>
+</div></div>
+<div class="paragraph"><p>Once you have the trace opened in Trace Compass, you can open both the recorded kernel and user space events. Double clicking on a user space event will bring out the kernel event that is happening at the same time and vice-versa.</p></div>
+<div class="paragraph"><p><span class="image">
+<a class="image" href="./Screenshots/UST-Kernel.png">
+<img src="./Screenshots/UST-Kernel.png" alt="./Screenshots/UST-Kernel.png" height="550" />
+</a>
+</span></p></div>
+<div class="paragraph"><p>More details about viewing and analysing user space traces:</p></div>
+<div class="paragraph"><p><a href="http://archive.eclipse.org/tracecompass/doc/org.eclipse.tracecompass.doc.user/LTTng-UST-Analyses.html#LTTng-UST_Analyses">http://archive.eclipse.org/tracecompass/doc/org.eclipse.tracecompass.doc.user/LTTng-UST-Analyses.html#LTTng-UST_Analyses</a></p></div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_strong_using_an_xml_analysis_to_create_a_custom_view_strong"><strong>Using an XML analysis to create a custom view</strong></h2>
+<div class="sectionbody">
+<div class="paragraph"><p>Finally, as mentionned earlier, viewing user space traces in Trace Compass can be fastidious, especially when analysing multiple timestamps from multiple events. Therefore, this final section will look into defining a custom view to analyse user space traces. That view is created with a simple XML file.</p></div>
+<div class="paragraph"><p>For the purpose of this example, we are going to generate a very simple trace with a few amount of events (only two) in order to have a simple and clear view. We are going to trace the function</p></div>
+<div class="listingblock">
+<div class="content">
+<pre><code>void emcmotCommandHandler(void *arg, long period)</code></pre>
+</div></div>
+<div class="paragraph"><p>from /src/emc/motion/command.c when executing the exact same gcode file we used earlier. To do so, we probe that function with a tracepoint at its beginning and one at the end. By doing so, we can not only see how much time the function takes to be executed each time it is called, but we can also see how much time seperates two different executions. Therefore, we are going to create, compile and link the following tracepoint provider.</p></div>
+<div class="listingblock">
+<div class="content">
+<pre><code>//machinekit2-tp.c
+#define TRACEPOINT_CREATE_PROBES
+#include "machinekit2_tp.h"
+
+//machinekit2-tp.h
+#undef TRACEPOINT_PROVIDER
+#define TRACEPOINT_PROVIDER machinekit_provider
+
+#if !defined(_MACHINEKIT_TP2_H) || defined(TRACEPOINT_HEADER_MULTI_READ)
+#define _MACHINEKIT_TP_H
+
+#include &lt;lttng/tracepoint.h&gt;
+TRACEPOINT_EVENT(
+    machinekit_provider,
+    command_handle,
+    TP_ARGS(
+        char*, my_function_file
+    ),
+    TP_FIELDS(
+        ctf_string(function_file, my_function_file)
+    )
+)
+
+TRACEPOINT_EVENT(
+    machinekit_provider,
+    after_command_handle,
+    TP_ARGS(
+        char*, my_function_file
+    ),
+    TP_FIELDS(
+        ctf_string(function_file, my_function_file)
+    )
+)
+
+#endif /* _MACHINEKIT2_TP_H */
+#undef TRACEPOINT_INCLUDE</code></pre>
+</div></div>
+<div class="paragraph"><p>Then, we simply compile it using the following commands:</p></div>
+<div class="listingblock">
+<div class="content">
+<pre><code>gcc -c -fpic -I. machinekit2_tp.c
+gcc -shared -Wl,--no-as-needed -o machinekit2_tp.so -llttng-ust machinekit2_tp.o</code></pre>
+</div></div>
+<div class="paragraph"><p>Then, by "dlopening" that shared library in the user space application, we can have access to the tracepoint provider and start probing the actual source code.</p></div>
+<div class="listingblock">
+<div class="content">
+<pre><code>//First line of the main in the application
+dlopen("/path-to-shared-library/machinekit2_tp.so", RTLD_LAZY);</code></pre>
+</div></div>
+<div class="paragraph"><p>Once that is done, we go into the actual source code we want to trace (/src/emc/motion/command.c). We then insert the header needed to find the tracepoint provider as well as the two tracepoint calls (one at the beginning of the function and of at its end).</p></div>
+<div class="listingblock">
+<div class="content">
+<pre><code>#define TRACEPOINT_DEFINE
+#define TRACEPOINT_PROBE_DYNAMIC_LINKAGE
+#include "/path-to-shared-library/machinekit2_tp.h"
+...
+void emcmotCommandHandler(void *arg, long period)
+{
+    tracepoint(machinekit_provider, command_handle, "/emc/motion/command.c");
+    ...
+    tracepoint(machinekit_provider, after_command_handle, "/emc/motion/command.c");
+    return;
+}</code></pre>
+</div></div>
+<div class="paragraph"><p>Once all that is done, we are ready to recompile and trace the application. By executing the following commands, we create a tracing session, we enable the user space events, we start the trace and we execute the task (gcode file).</p></div>
+<div class="listingblock">
+<div class="content">
+<pre><code>#Create the tracing session (trace will be outputed in "lttng-scripts/machinekit-ust")
+sudo lttng create ust -o machinekit-ust
+
+#Enable ust events
+sudo lttng enable-event -u -a
+
+#Start the tracing
+sudo lttng start
+
+#Start machinekit and execute the gcode file (task to be traced)
+linuxcnc
+
+#Stop the tracing
+sudo lttng stop
+
+#Clean the tracing session
+sudo lttng destroy -a
+
+#Give proper permission to be able to read the trace
+sudo chmod -R 755 machinekit-ust</code></pre>
+</div></div>
+<div class="paragraph"><p>Finally, when we have the trace, we import it into Trace Compass like we did earlier. But this time, we are also going to import an XML analysis that will define and create a view for the traced events. In this context, the XML file will only have two sections. The first one will be a Timegraph View. This section defines a label for the view, the colors that will be assigned to the various events and the display path of each event. The second section, which is the core of the file, is the state provider. It contains, again, a label, some defined values to be assigned to the events and the actual events. A really well written and clear tutorial exists on writing custom XML analysis to define views in Trace Compass. It is found here:</p></div>
+<div class="paragraph"><p><a href="http://archive.eclipse.org/tracecompass/doc/org.eclipse.tracecompass.doc.user/Data-driven-analysis.html">http://archive.eclipse.org/tracecompass/doc/org.eclipse.tracecompass.doc.user/Data-driven-analysis.html</a></p></div>
+<div class="paragraph"><p>For the purpose of this example however, and to illustrate what it can do, we are going to use the following XML file:</p></div>
+<div class="listingblock">
+<div class="content">
+<pre><code>&lt;?xml version="1.0" encoding="UTF-8"?&gt;
+&lt;tmfxml xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="stateprovider1.xsd"&gt;
+
+        &lt;!-- The state provider assigns states from events --&gt;
+        &lt;stateProvider id="linux.signal.sp1" version="1"&gt;
+                &lt;head&gt;
+                        &lt;traceType id="org.eclipse.linuxtools.lttng2.ust.tracetype" /&gt;
+                        &lt;label value="Machinekit UST example" /&gt;
+                &lt;/head&gt;
+
+                &lt;!-- Convenience names for the state values --&gt;
+                &lt;definedValue name="COMMAND_HANDLER" value="0" /&gt;
+                &lt;definedValue name="AFTER_COMMAND_HANDLER" value="1" /&gt;
+
+                &lt;!-- Event handlers --&gt;
+                &lt;eventHandler eventName="machinekit_provider:command_handle"&gt;
+                        &lt;stateChange&gt;
+                                &lt;stateAttribute type="constant" value="Thread" /&gt;
+                                &lt;stateAttribute type="eventField" value="function_file" /&gt;
+                                &lt;stateValue type="int" value="$COMMAND_HANDLER" /&gt;
+                        &lt;/stateChange&gt;
+                &lt;/eventHandler&gt;
+
+                &lt;eventHandler eventName="machinekit_provider:after_command_handle"&gt;
+                        &lt;stateChange&gt;
+                                &lt;stateAttribute type="constant" value="Thread" /&gt;
+                                &lt;stateAttribute type="eventField" value="function_file" /&gt;
+                                &lt;stateValue type="int" value="$AFTER_COMMAND_HANDLER" /&gt;
+                        &lt;/stateChange&gt;
+                &lt;/eventHandler&gt;
+        &lt;/stateProvider&gt;
+
+        &lt;!-- This is the definition of the time-graph view --&gt;
+        &lt;timeGraphView id="linux.signal.timegraph"&gt;
+                &lt;head&gt;
+                        &lt;analysis id="linux.signal.sp1" /&gt;
+                        &lt;label value="Machinekit UST View" /&gt;
+                &lt;/head&gt;
+
+                &lt;!-- Colors assigned to the state values --&gt;
+                &lt;definedValue name="COMMAND_HANDLER" value="0" color="#FFDD00" /&gt;
+                &lt;definedValue name="AFTER_COMMAND_HANDLER" value="1" color="#00CC11" /&gt;
+
+                &lt;!-- Which attributes to "print" in the view --&gt;
+                &lt;entry path="Thread/*"&gt;
+                        &lt;display type="self" /&gt;
+                &lt;/entry&gt;
+        &lt;/timeGraphView&gt;
+&lt;/tmfxml&gt;</code></pre>
+</div></div>
+<div class="paragraph"><p>Once imported in Trace Compass, this XML file will create the following view:</p></div>
+<div class="paragraph"><p><span class="image">
+<a class="image" href="./Screenshots/XML.png">
+<img src="./Screenshots/XML.png" alt="./Screenshots/XML.png" height="550" />
+</a>
+</span></p></div>
+<div class="paragraph"><p>As illustrated in the above picture, the events now have a colored bar that represents how much time they take to be executed. By hovering over one of those bar, we have the details concerning the execution (start time, stop time, timestamp, event name, etc.). Again, by clicking on any event from the other figured view, we are taken directly to the corresponding position in the timegraph view. Using an XML file to define a view can be really advantageous as simply by scrolling through the view, one could see which event takes longer than normal. On a final note, it is worth saying that XML files can also be written to define views for kernel traces.</p></div>
+</div>
+</div>
+</div>
+<div id="footnotes"><hr /></div>
+<div id="footer">
+<div id="footer-text">
+Last updated 2015-10-19 02:15:17 EDT
+</div>
+</div>
+</body>
+</html>
