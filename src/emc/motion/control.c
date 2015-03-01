@@ -12,7 +12,10 @@
 *
 * Copyright (c) 2004 All rights reserved.
 ********************************************************************/
+#define TRACEPOINT_DEFINE
+#define TRACEPOINT_PROBE_DYNAMIC_LINKAGE
 #include "machinekit_tp.h"
+int cycle_counter = 1;
 
 #include "posemath.h"
 #include "rtapi.h"
@@ -228,9 +231,6 @@ static void update_status(void);
 
 void emcmotController(void *arg, long period)
 {
-    void *lib = dlopen("/home/mah/machinekit-lttng/lib/machinekit_tp.so", RTLD_LAZY);
-    int cycle_counter = 1;
-
     // - overrun detection -
     // maintain some records of how long it's been between calls.  The
     // first time we see a delay that's much longer than the records show

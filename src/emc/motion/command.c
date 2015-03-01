@@ -381,8 +381,6 @@ int abort_and_switchback(void)
   */
 void emcmotCommandHandler(void *arg, long period)
 {
-    void *lib = dlopen("/home/mah/machinekit-lttng/lib/machinekit_tp.so", RTLD_LAZY);
-
     int joint_num;
     int n;
     emcmot_joint_t *joint;
