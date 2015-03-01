@@ -56,6 +56,7 @@
 * Last change:
 *
 ********************************************************************/
+#include "/usr/local/lib/lttng-tracepoints/machinekit_tp.h"
 
 #include <linux/types.h>
 #include <float.h>
@@ -387,7 +388,7 @@ void emcmotCommandHandler(void *arg, long period)
     emcmot_comp_entry_t *comp_entry;
     char issue_atspeed = 0;
     
-check_stuff ( "before command_handler()" );
+tracepoint(machinekit_provider, function_timestamp, "before_command_handle(command.c)");
 
     /* check for split read */
     if (emcmotCommand->head != emcmotCommand->tail) {
@@ -1750,7 +1751,7 @@ check_stuff ( "before command_handler()" );
 
     }
     /* end of: if-new-command */
-check_stuff ( "after command_handler()" );
+tracepoint(machinekit_provider, function_timestamp, "after_command_handle(command.c)");
 
     return;
 }
